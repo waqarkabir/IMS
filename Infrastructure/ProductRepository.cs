@@ -5,21 +5,18 @@ namespace Infrastructure
 {
     public static class ProductRepository
     {
-        public static Product[] Create(Product[] products, int productIndex)
+        public static Product[] Create(Product[] products, int productIndex, int categoryId)
         {
             Console.WriteLine("Enter Product Name");
             string name = Console.ReadLine();
             Console.WriteLine("Enter Product Description");
             string description = Console.ReadLine();
             Console.WriteLine("Enter Product Category Id from Category List");
-            int categoryId = int.Parse(Console.ReadLine());
-
-            //Category Confirm
 
             Product product = new Product(name,description,categoryId);
-
+            product.Id = productIndex+1;
             products[productIndex] = product;
-            Console.WriteLine($"Product Id: {productIndex + 1}, {product}");
+            Console.WriteLine(product);
 
             return products;
         }

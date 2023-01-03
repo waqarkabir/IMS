@@ -64,12 +64,12 @@ namespace Entities
 
         public DateTime EnteredOn { get; private set; }
         public DateTime UpdatedOn { get; private set;}
-
+        
         public Category Category { get; set; }
 
         public override string ToString()
         {
-            return $"Product Name: {Name}, Category: {CategoryId}, Product Description: {Description}, Product Entered on {EnteredOn} ";
+            return $"Product Id: {Id}, Name: {Name}, Category: {CategoryId}, Product Description: {Description}, Product Entered on {EnteredOn} ";
         }
     }
 }

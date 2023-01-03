@@ -19,8 +19,9 @@ namespace Infrastructure
             string description = Console.ReadLine();
 
             category = new Category(name,description);
+            category.Id = categoryIndex+1;
             categories[categoryIndex] = category;
-            Console.WriteLine($"Category Id: {categoryIndex + 1}, {category}");
+            Console.WriteLine(category);
 
             return categories;
         }
@@ -38,11 +39,67 @@ namespace Infrastructure
 
             for (int i = 0; i < categoryIndex; i++)
             {
-                Console.WriteLine($"Category Id is {i + 1}, {categories[i]}");
+                Console.WriteLine(categories[i]);
             }
 
             return true;
 
+        }
+
+        public static void SearchByName(Category[] categories, int categoryIndex)
+        {
+            Console.WriteLine("Enter a category to search");
+            string searchString = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(searchString) || string.IsNullOrWhiteSpace(searchString))
+            {
+                Console.WriteLine("Search string cannot be null!");
+            }
+
+            bool stringFound = false;
+
+            for (int i = 0; i < categoryIndex; i++)
+            {
+                if (categories[i].Name.Contains(searchString))
+                {
+                    Console.WriteLine(categories[i]);
+                    stringFound = true;
+                    break;
+                }
+            }
+
+            if (!stringFound)
+            {
+                Console.WriteLine($"No category with name '{searchString}' is available, try again ");
+            }
+        }
+
+        public static void SearchById(Category[] categories, int categoryIndex)
+        {
+            Console.WriteLine("Enter a category to search");
+            string searchString = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(searchString) || string.IsNullOrWhiteSpace(searchString))
+            {
+                Console.WriteLine("Search string cannot be null!");
+            }
+
+            bool stringFound = false;
+
+            for (int i = 0; i < categoryIndex; i++)
+            {
+                if (categories[i].Name.Contains(searchString))
+                {
+                    Console.WriteLine(categories[i]);
+                    stringFound = true;
+                    break;
+                }
+            }
+
+            if (!stringFound)
+            {
+                Console.WriteLine($"No category with name '{searchString}' is available, try again ");
+            }
         }
     }
 }

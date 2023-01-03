@@ -82,6 +82,13 @@ namespace ConsoleApp
 
                                 #endregion
                                 break;
+                            case "3":
+                                Console.Clear();
+                                #region Search Category
+                                CategoryRepository.SearchByName(categories, categoryIndex);
+                                Console.ReadKey();
+                                #endregion
+                                break;
                             default:
                                 Console.WriteLine("Invalid input");
                                 subMenuTerminator = true;
@@ -116,25 +123,47 @@ namespace ConsoleApp
 
                                 #region Create Product
                                 bool categoryEmpty = CategoryRepository.List(categories, categoryIndex);
-
+                                bool categoryFound = false; 
                                 if (!categoryEmpty)
                                 {
                                     Console.WriteLine("Empty Category List");
                                     break;
                                 }
 
+                                Console.WriteLine("Enter a category of Product");
+
+                                int categoryId = 0;
+                                int.TryParse(Console.ReadLine(), out categoryId);
+                                for (int i = 0; i < categoryIndex; i++)
+                                {
+                                    if (categoryId == categories[i].Id)
+                                    {
+                                        categoryFound = true;
+                                    }
+                                }
+
+                                if (!categoryFound)
+                                {
+                                    Console.WriteLine($"There is no category named {categoryId}");
+                                    Console.WriteLine("Enter any key for main menu");
+                                    Console.ReadKey();
+                                    break;
+                                }
+
                                 try
                                 {
-                                    products = ProductRepository.Create(products, productIndex);
+                                    products = ProductRepository.Create(products, productIndex, categoryId);
                                 }
                                 catch (ArgumentNullException)
                                 {
-                                    Console.WriteLine("Name and Description and Category Id is required!");
+                                    Console.WriteLine("Name, Description and Category Id is required!");
                                     Console.WriteLine("Enter any key for main menu");
                                     Console.ReadKey();
                                     break;
                                 }
                                 productIndex = productIndex + 1;
+
+
                                 Console.WriteLine("Press any key for main menu");
                                 Console.ReadKey();
                                 #endregion
