@@ -11,30 +11,56 @@ namespace Entities
     {
         private string _name;
         private string _description;
-        public Category(string name, string description)
+        private string _updatedBy;
+
+        public Category()
+        {
+            EnteredOn = DateTime.Now;
+        }
+        public Category(string name, string description):this()
         {
             Name = name;
             Description = description;
-            EnteredOn = DateTime.Now;
+        }
+
+        public Category(string name, string description, string updatedBy):this()
+        {
+            Name = name;
+            Description = description;
+            UpdatedOn = DateTime.Now;
+            UpdatedBy = updatedBy;
         }
         public int Id { get; set; }
+
+        public string UpdatedBy
+        {
+            get { return _updatedBy; }
+            set {
+                if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentNullException(value,"Give name of updating authority");
+                }
+                _updatedBy = value; 
+            }
+        }
 
         public string Name
         {
             get { return _name; }
-            private set {
+            set
+            {
                 if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentNullException(value,"Name and description can't be null");
+                    throw new ArgumentNullException(value, "Name and description can't be null");
                 }
-                _name = value; 
+                _name = value;
             }
         }
 
         public string Description
         {
             get { return _description; }
-            private set
+            set
             {
                 if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
                 {
@@ -46,7 +72,7 @@ namespace Entities
 
 
         public DateTime EnteredOn { get; private set; }
-        public DateTime UpdatedOn { get; private set; }
+        public DateTime UpdatedOn { get; set; }
         public Product[] Products { get; set; } = new Product[10];
 
         public override string ToString()

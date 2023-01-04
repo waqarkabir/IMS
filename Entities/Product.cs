@@ -26,7 +26,7 @@ namespace Entities
         public string Name
         {
             get { return _name; }
-            private set
+            set
             {
                 if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
                 {
@@ -39,7 +39,7 @@ namespace Entities
         public string Description
         {
             get { return _description; }
-            private set
+            set
             {
                 if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
                 {

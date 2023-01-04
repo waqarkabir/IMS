@@ -14,6 +14,7 @@ namespace Infrastructure
 
             Category category = null;
             Console.WriteLine("Enter Category Name");
+            
             string name = Console.ReadLine();
             Console.WriteLine("Enter Category Description");
             string description = Console.ReadLine();
@@ -46,25 +47,23 @@ namespace Infrastructure
 
         }
 
-        public static void SearchByName(Category[] categories, int categoryIndex)
+        public static void SearchByName(Category[] categories, int categoryIndex, string searchString)
         {
-            Console.WriteLine("Enter a category to search");
-            string searchString = Console.ReadLine();
 
+            bool stringFound = false;
             if (string.IsNullOrEmpty(searchString) || string.IsNullOrWhiteSpace(searchString))
             {
                 Console.WriteLine("Search string cannot be null!");
+                return;
             }
 
-            bool stringFound = false;
 
             for (int i = 0; i < categoryIndex; i++)
             {
-                if (categories[i].Name.Contains(searchString))
+                if (categories[i].Id.ToString().Contains(searchString))
                 {
                     Console.WriteLine(categories[i]);
                     stringFound = true;
-                    break;
                 }
             }
 
@@ -74,32 +73,26 @@ namespace Infrastructure
             }
         }
 
-        public static void SearchById(Category[] categories, int categoryIndex)
+        public static Category[] Update(Category[] categories)
         {
-            Console.WriteLine("Enter a category to search");
-            string searchString = Console.ReadLine();
 
-            if (string.IsNullOrEmpty(searchString) || string.IsNullOrWhiteSpace(searchString))
-            {
-                Console.WriteLine("Search string cannot be null!");
-            }
+            Console.WriteLine("Enter a category id to edit");
+            int searchIndex = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Enter New Category Name");
 
-            bool stringFound = false;
+            string name = Console.ReadLine();
 
-            for (int i = 0; i < categoryIndex; i++)
-            {
-                if (categories[i].Name.Contains(searchString))
-                {
-                    Console.WriteLine(categories[i]);
-                    stringFound = true;
-                    break;
-                }
-            }
+            Console.WriteLine("Enter New Category Description");
 
-            if (!stringFound)
-            {
-                Console.WriteLine($"No category with name '{searchString}' is available, try again ");
-            }
+            string description = Console.ReadLine();
+            categories[searchIndex - 1].Name = name;
+            
+            categories[searchIndex - 1].Description = description;
+
+            Console.WriteLine("Category Updated");
+
+            return categories;
         }
+
     }
 }
