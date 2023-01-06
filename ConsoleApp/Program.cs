@@ -10,7 +10,8 @@ namespace ConsoleApp
         static void Main(string[] args)
         {
             Console.Title = "Inventory Management System (Developed by Waqar Kabir)";
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
             Category[] categories = new Category[10];
             Product[] products = new Product[100];
             int categoryIndex = 0;
