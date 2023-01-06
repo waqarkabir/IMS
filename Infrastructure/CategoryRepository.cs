@@ -20,9 +20,9 @@ namespace Infrastructure
             string description = Console.ReadLine();
 
             category = new Category(name,description);
-            category.Id = categoryIndex+1;
+            category.Id = categoryIndex;
             categories[categoryIndex] = category;
-            Console.WriteLine(category);
+            Console.WriteLine($"Category Id: {categoryIndex+1}, {category}");
 
             return categories;
         }
@@ -40,37 +40,35 @@ namespace Infrastructure
 
             for (int i = 0; i < categoryIndex; i++)
             {
-                Console.WriteLine(categories[i]);
+                Console.WriteLine($"Category Id: {categories[i].Id+1}, {categories[i]}");
             }
 
             return true;
 
         }
 
-        public static void SearchByName(Category[] categories, int categoryIndex, string searchString)
+        public static int SearchById(Category[] categories, int categoryIndex, string searchString)
         {
 
             bool stringFound = false;
-            if (string.IsNullOrEmpty(searchString) || string.IsNullOrWhiteSpace(searchString))
-            {
-                Console.WriteLine("Search string cannot be null!");
-                return;
-            }
-
+            int category = 0;
 
             for (int i = 0; i < categoryIndex; i++)
             {
-                if (categories[i].Id.ToString().Contains(searchString))
+                if (categories[i].Id.Equals(Convert.ToInt32(searchString)-1))
                 {
-                    Console.WriteLine(categories[i]);
+                    Console.WriteLine($"Category Id: {categories[i].Id+1}, {categories[i]}");
                     stringFound = true;
+                    category = categories[i].Id;
+                    break;
                 }
             }
 
             if (!stringFound)
             {
-                Console.WriteLine($"No category with name '{searchString}' is available, try again ");
+                Console.WriteLine($"No category with id '{searchString}' is available, try again ");
             }
+            return category;
         }
 
         public static Category[] Update(Category[] categories)
@@ -78,6 +76,7 @@ namespace Infrastructure
 
             Console.WriteLine("Enter a category id to edit");
             int searchIndex = Convert.ToInt32(Console.ReadLine());
+
             Console.WriteLine("Enter New Category Name");
 
             string name = Console.ReadLine();
@@ -94,5 +93,21 @@ namespace Infrastructure
             return categories;
         }
 
+
+        public static Category[] Delete(Category[] categories, int categoryIndex, int categoryId)
+        {
+
+            for (int i = Convert.ToInt32(categoryId); i < categoryIndex; i++)
+            {
+                categories[i] = categories[i+1];
+            }
+
+
+            Category[] newArray = new Category[100];
+            Array.Copy(categories, newArray, categoryIndex - 1);
+
+            Console.WriteLine("Category Deleted");
+            return newArray;
+        }
     }
 }

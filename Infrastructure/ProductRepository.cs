@@ -13,31 +13,30 @@ namespace Infrastructure
             string description = Console.ReadLine();
 
             Product product = new Product(name,description,categoryId);
-            product.Id = productIndex+1;
+            product.Id = productIndex;
             products[productIndex] = product;
-            Console.WriteLine(product);
+            Console.WriteLine($"Product Id: {productIndex+1} , {product}");
 
             return products;
         }
 
-        public static void List(Product[] products, int productIndex)
+        public static bool List(Product[] products, int productIndex)
         {
             if (productIndex == 0)
             {
                 Console.WriteLine("There are no products entered yet!");
                 Console.WriteLine("Enter any key to exit");
                 Console.ReadKey();
-                return;
+                return false;
             }
             Console.WriteLine("Product List");
 
             for (int i = 0; i < productIndex; i++)
             {
-                Console.WriteLine(products[i]);
+                Console.WriteLine("Product Id:"+ (i + 1) + " , " + products[i]);
             }
 
-            Console.WriteLine("Enter any key to exit");
-
+            return true;
         }
 
         public static void Search(Product[] products, int productIndex)
@@ -87,6 +86,22 @@ namespace Infrastructure
             Console.WriteLine("Product Updated");
 
             return products;
+        }
+
+        public static Product[] Delete(Product[] products, int productIndex, int productId)
+        {
+
+            for (int i = Convert.ToInt32(productId); i < productIndex; i++)
+            {
+                products[i - 1] = products[i];
+            }
+
+
+            Product[] newArray = new Product[100];
+            Array.Copy(products, newArray, productIndex - 1);
+
+            Console.WriteLine("Product Deleted");
+            return newArray;
         }
     }
 }

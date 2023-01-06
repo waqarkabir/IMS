@@ -77,7 +77,7 @@ namespace Entities
 
         public override string ToString()
         {            
-            return $"Category Id: {Id}, Category Name: {Name}, Category Description: {Description},  Category Entered on {EnteredOn}";
+            return $"Category Name: {Name}, Category Description: {Description},  Category Entered on {EnteredOn}";
         }
     }
 }

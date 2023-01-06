@@ -1,6 +1,7 @@
 ﻿using Entities;
 using Infrastructure;
 using System;
+using System.Collections.Generic;
 
 namespace ConsoleApp
 {
@@ -16,6 +17,7 @@ namespace ConsoleApp
             int productIndex = 0;
             bool mainMenuTerminator = false;
             string input;
+            
 
             do
             {
@@ -45,7 +47,6 @@ namespace ConsoleApp
                         Console.WriteLine("4) Update Category");
                         Console.WriteLine("5) Delete Category");
                         Console.WriteLine("6) Main Menu");
-                        Console.WriteLine("7) Terminate Program");
                         Console.WriteLine("___________________________________");
 
                         input = Console.ReadLine();
@@ -81,8 +82,8 @@ namespace ConsoleApp
                                 #region Category List
 
                                 CategoryRepository.List(categories, categoryIndex);
-                                
-                                
+
+
                                 ProductRepository.List(products, productIndex);
 
                                 Console.ReadKey();
@@ -92,18 +93,42 @@ namespace ConsoleApp
                             case "3":
                                 Console.Clear();
                                 #region Search Category
+                                bool categoryEmpty = CategoryRepository.List(categories, categoryIndex);
+                                bool productFound = false;
+                                if (!categoryEmpty)
+                                {
+                                    Console.WriteLine("Empty Category List");
+                                    break;
+                                }
+
                                 Console.WriteLine("Enter a category to search");
                                 string searchString = Console.ReadLine();
-                                CategoryRepository.SearchByName(categories, categoryIndex, searchString);
-                                Console.WriteLine("Products List");
-                                for (int i = 0; i < productIndex; i++)
+                                if (string.IsNullOrEmpty(searchString) || string.IsNullOrWhiteSpace(searchString))
                                 {
-                                    if (products[i].CategoryId==Convert.ToInt32(searchString))
+                                    Console.WriteLine("Search string cannot be null!");
+                                    return;
+                                }
+                                int category = CategoryRepository.SearchById(categories, categoryIndex, searchString);
+                                Console.WriteLine("Products List");
+                                for (int j = 0; j < productIndex; j++)
+                                {
+                                    if (category == Convert.ToInt32(searchString)-1)
                                     {
-                                        Console.WriteLine(products[i]);
+                                        Console.WriteLine($"Product Id:{j + 1}, {products[j]}");
+                                        productFound = true;
+                                        break;
                                     }
                                 }
-                                    
+
+                                if (!productFound)
+                                {
+                                    Console.WriteLine($"No product with category id '{searchString}' is available");
+                                    Console.WriteLine("Press any key for main menu");
+                                    Console.ReadKey();
+                                    subMenuTerminator = true;
+                                    break;
+                                }
+
 
                                 Console.ReadKey();
                                 #endregion
@@ -114,6 +139,45 @@ namespace ConsoleApp
                                 CategoryRepository.Update(categories);
                                 Console.ReadKey();
                                 #endregion
+                                break;
+                            case "5":
+                                #region Delete Category
+
+                                Console.Clear();
+                                bool categoryEmptyCheck = CategoryRepository.List(categories, categoryIndex);
+                                if (!categoryEmptyCheck)
+                                {
+                                    Console.WriteLine("Empty Category List");
+                                    break;
+                                }
+
+                                Console.WriteLine("Enter a category to search");
+                                string searchCatForDelete = Console.ReadLine();
+                                if (string.IsNullOrEmpty(searchCatForDelete) || string.IsNullOrWhiteSpace(searchCatForDelete))
+                                {
+                                    Console.WriteLine("Search string cannot be null!");
+                                    return;
+                                }
+                                int categoryForDelete = CategoryRepository.SearchById(categories, categoryIndex, searchCatForDelete);
+
+                                try
+                                {
+                                    categories = CategoryRepository.Delete(categories, categoryIndex, categoryForDelete);
+                                }
+                                catch (ArgumentNullException)
+                                {
+                                    Console.WriteLine("Category Id not found!");
+                                    Console.WriteLine("Enter any key for main menu");
+                                    Console.ReadKey();
+                                    break;
+                                }
+                                categoryIndex = categoryIndex - 1;
+                                Console.WriteLine("Press any key for main menuu");
+                                Console.ReadKey();
+                                #endregion
+                                break;
+                            case "6":
+                                subMenuTerminator = true;
                                 break;
                             default:
                                 Console.WriteLine("Invalid input");
@@ -137,7 +201,6 @@ namespace ConsoleApp
                         Console.WriteLine("4) Update Product");
                         Console.WriteLine("5) Delete Product");
                         Console.WriteLine("6) Main Menu");
-                        Console.WriteLine("7) Terminate Program");
                         Console.WriteLine("___________________________________");
 
                         input = Console.ReadLine();
@@ -163,7 +226,7 @@ namespace ConsoleApp
                                 int.TryParse(input, out categoryId);
                                 for (int i = 0; i < categoryIndex; i++)
                                 {
-                                    if (categoryId == categories[i].Id)
+                                    if (categoryId - 1 == categories[i].Id)
                                     {
                                         categoryFound = true;
                                     }
@@ -171,7 +234,7 @@ namespace ConsoleApp
 
                                 if (!categoryFound)
                                 {
-                                    Console.WriteLine($"There is no category named {input}");
+                                    Console.WriteLine($"There is no  category id named {input}");
                                     Console.WriteLine("Enter any key for main menu");
                                     Console.ReadKey();
                                     break;
@@ -201,7 +264,7 @@ namespace ConsoleApp
                                 #region Product List
 
                                 ProductRepository.List(products, productIndex);
-
+                                Console.WriteLine("Enter any key to exit");
                                 Console.ReadKey();
 
                                 #endregion
@@ -223,6 +286,58 @@ namespace ConsoleApp
                                 ProductRepository.Update(products);
                                 Console.ReadKey();
                                 #endregion
+                                break;
+                            case "5":
+                                #region Delete Product
+
+                                Console.Clear();
+                                bool productEmpty = ProductRepository.List(products, productIndex);
+                                bool productFound = false;
+                                if (!productEmpty)
+                                {
+                                    Console.WriteLine("Empty Product List");
+                                    break;
+                                }
+
+                                Console.WriteLine("Enter a product id");
+
+                                int productId = -1;
+                                input = Console.ReadLine();
+                                int.TryParse(input, out productId);
+                                for (int i = 0; i < productIndex; i++)
+                                {
+                                    if (productId == products[i].Id)
+                                    {
+                                        productFound = true;
+                                    }
+                                }
+
+                                if (!productFound)
+                                {
+                                    Console.WriteLine($"There is no product having id {input}");
+                                    Console.WriteLine("Enter any key for main menu");
+                                    Console.ReadKey();
+                                    break;
+                                }
+
+                                try
+                                {
+                                    products = ProductRepository.Delete(products, productIndex, productId);
+                                }
+                                catch (ArgumentNullException)
+                                {
+                                    Console.WriteLine("Product Id not found!");
+                                    Console.WriteLine("Enter any key for main menu");
+                                    Console.ReadKey();
+                                    break;
+                                }
+                                productIndex = productIndex - 1;
+                                Console.WriteLine("Press any key for main menuu");
+                                Console.ReadKey();
+                                #endregion
+                                break;
+                            case "6":
+                                subMenuTerminator = true;
                                 break;
                             default:
                                 Console.WriteLine("Invalid input");

@@ -52,7 +52,7 @@ namespace Entities
         public int CategoryId
         {
             get { return _categoryId; }
-            private set
+            set
             {
                 if (string.IsNullOrEmpty(value.ToString()) || string.IsNullOrWhiteSpace(value.ToString()))
                 {
@@ -69,7 +69,7 @@ namespace Entities
 
         public override string ToString()
         {
-            return $"Product Id: {Id}, Name: {Name}, Category: {CategoryId}, Product Description: {Description}, Product Entered on {EnteredOn} ";
+            return $"Name: {Name}, Category: {CategoryId}, Product Description: {Description}, Product Entered on {EnteredOn} ";
         }
     }
 }
