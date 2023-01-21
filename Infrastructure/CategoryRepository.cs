@@ -71,6 +71,30 @@ namespace Infrastructure
             return category;
         }
 
+        public static int SearchByName(Category[] categories, int categoryIndex, string searchString)
+        {
+
+            bool stringFound = false;
+            int category = 0;
+
+            for (int i = 0; i < categoryIndex; i++)
+            {
+                if (categories[i].Name.Contains(searchString))
+                {
+                    Console.WriteLine($"{categories[i]}");
+                    stringFound = true;
+                    category = categories[i].Id;
+                    break;
+                }
+            }
+
+            if (!stringFound)
+            {
+                Console.WriteLine($"No category with id '{searchString}' is available, try again ");
+            }
+            return category;
+        }
+
         public static Category[] Update(Category[] categories)
         {
 

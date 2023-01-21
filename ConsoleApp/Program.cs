@@ -109,12 +109,14 @@ namespace ConsoleApp
                                     Console.WriteLine("Search string cannot be null!");
                                     return;
                                 }
-                                int category = CategoryRepository.SearchById(categories, categoryIndex, searchString);
+                                int category = CategoryRepository.SearchByName(categories, categoryIndex, searchString);
                                 Console.WriteLine("Products List");
                                 for (int j = 0; j < productIndex; j++)
                                 {
-                                    if (category == Convert.ToInt32(searchString)-1)
+                                    if (categories[j].Id ==category)
                                     {
+
+                                    //if (category == Convert.ToInt32(searchString)-1)
                                         Console.WriteLine($"Product Id:{j + 1}, {products[j]}");
                                         productFound = true;
                                         break;
